@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Nook PH</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="ecommcss.css">
+
+</head>
+
+<style>
+  :root{
+    --maroon: #621616;
+    --pink-pill: #f3d3d3;
+    --muted-rose: #b98a86;
+    --border: #cfcbc9;
+    --max-width: 1180px;
+    --page-bg: #ffffff;
+    --page-side-padding: 12px; /* small side padding */
+    --accordion-max-width: 1100px; /* slightly reduced accordion width */
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: "Roboto", system-ui, -apple-system, "Segoe UI", Arial;
+    background:var(--page-bg);
+    color:#111;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* --- TOP MAROON STRIP --- */
+  .top-strip{
+    background:var(--maroon);
+    height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    padding:0 28px;
+    box-shadow:0 1px 0 rgba(0,0,0,0.12);
+  }
+  .top-strip .nav-links{
+    display:flex;
+    gap:28px;
+    align-items:center;
+    font-size:15px;
+    font-weight:700;
+    color:#fff;
+    letter-spacing:.6px;
+    text-transform:uppercase;
+  }
+  .top-strip .nav-links a{ color:#fff; text-decoration:none; }
+
+  /* --- SEARCH ROW --- */
+  .search-row-wrap{
+    background:linear-gradient(#fff,#fbfbfb);
+    border-bottom:1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+  }
+
+  .search-row{
+    max-width: var(--max-width);
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    padding:14px 0;
+    position:relative;
+  }
+
+  .left-group{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    min-width:0;
+    flex:1;
+    padding-left:0;
+  }
+
+  /* logo flush to the very left edge of the centered content area,
+     but nudged in by 18px so it isn't cut off */
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:"Montserrat",sans-serif;
+    font-weight:800;
+    color:var(--maroon);
+    font-size:18px;
+    flex-shrink:0;
+    position: relative;
+    left: calc((100vw - var(--max-width)) / -2 + 18px); /* +18px inset */
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  /* Brand image size to match supplied photo (desktop) */
+  .brand-img{
+    display:block;
+    height:56px;       /* LARGER logo to match supplied photo */
+    width:auto;
+    object-fit:contain;
+  }
+
+  /* keep pill centered */
+  .search-wrap{
+    flex:1 1 640px;
+    position:relative;
+    display:flex;
+    justify-content:center;
+    min-width:0;
+  }
+
+  @media (max-width: 1180px) {
+    .search-row{
+      padding-left:12px;
+      padding-right:12px;
+    }
+    .logo{
+      left: 12px;
+      padding-left: 0;
+    }
+    .brand-img{
+      height:48px; /* slightly smaller on medium screens */
+    }
+  }
+
+  /* search pill */
+  .search{
+    width:100%;
+    max-width:720px;
+    padding:12px 48px 12px 26px;
+    border-radius:28px;
+    border:0;
+    background:var(--pink-pill);
+    color:#4b3a3a;
+    font-family:"Montserrat",sans-serif;
+    font-size:15px;
+    font-weight:500;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.04), inset 0 -1px 0 rgba(0,0,0,0.02);
+    outline:none;
+  }
+  .search::placeholder{ color:#987070; }
+
+  .search-icon{
+    position:absolute;
+    right: calc(50% - 360px + 12px);
+    top:50%;
+    transform:translateY(-50%);
+    pointer-events:none;
+    color:#2d2424;
+    width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  }
+
+  .icons{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    color:#222;
+    font-size:24px;
+    flex-shrink:0;
+  }
+
+  /* Icon buttons (heart, cart, profile) */
+  .icon-button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:44px;
+    height:44px;
+    padding:6px;
+    border-radius:8px;
+    border:0;
+    background:transparent;
+    color:inherit;
+    cursor:pointer;
+    transition: background .15s ease, transform .06s ease;
+  }
+  .icon-button svg{
+    width:28px;
+    height:28px;
+    stroke: currentColor;
+    fill: none;
+    display:block;
+  }
+  .icon-button:hover{ background: rgba(0,0,0,0.03); }
+  .icon-button:active{ transform: translateY(1px); }
+  .icon-button:focus-visible{ outline:3px solid rgba(98,22,22,0.12); outline-offset:2px; }
+
+  @media (max-width: 1180px) {
+    .search-row{
+      padding-left:12px;
+      padding-right:12px;
+    }
+    .logo{
+      left: 0;
+      padding-left: 0;
+    }
+  }
+
+  /* --- BACK / CONTINUE ROW --- */
+  .action-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: var(--max-width);
+    margin: 10px auto 0;
+    padding: 8px 0 0;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .action-row .back,
+  .action-row .continue {
+    color: #000;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-decoration: underline;
+    letter-spacing: 0.6px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .action-row a {
+    color: #000 !important;
+  }
+
+  @media (max-width: 760px) {
+    .action-row {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+  }
+
+  /* --- TITLE --- */
+  .page-title{
+    max-width: var(--max-width);
+    margin: 20px auto 22px;
+    padding:0 20px;
+    text-align:center;
+    font-family:"Montserrat",sans-serif;
+    font-weight:800;
+    font-size:44px;
+    line-height:1;
+    color:#000;
+  }
+
+  /* --- MAIN / ACCORDION --- */
+  .container{
+    max-width: none;
+    margin: 0 auto 40px;
+    padding: 0 var(--page-side-padding);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .accordion{
+    max-width: 1350px;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .accordion-item{
+    border:1px solid var(--border);
+    margin:0 0 14px 0;
+    background:#fff;
+    width:100%;
+  }
+
+  .accordion-header{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 18px;
+    background:transparent;
+    border:0;
+    text-align:left;
+    font-size:15px;
+    color:var(--muted-rose);
+    cursor:pointer;
+    font-weight:500;
+  }
+  .accordion-header:focus{ outline:3px solid rgba(98,22,22,0.08); outline-offset:2px; }
+
+  .chev-wrap{ width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--maroon) }
+  .chev{ width:14px;height:14px; transition:transform .22s ease; color:var(--maroon); }
+  .accordion-header[aria-expanded="true"] .chev{ transform:rotate(180deg); }
+
+  .accordion-panel{
+    padding:0 18px;
+    overflow:hidden;
+    transition: max-height .28s cubic-bezier(.2,.8,.2,1), padding .18s linear;
+    max-height:0;
+    font-size:14px;
+    color:#333;
+  }
+  .accordion-panel.open{ padding:12px 18px 18px 18px; }
+  .accordion-panel p{ margin:0; line-height:1.5; color:#444; }
+
+  .site-footer{
+    height:120px;
+    background:var(--maroon);
+    margin-top:28px;
+  }
+
+  @media (min-width:1200px){
+    .search-row{ max-width: var(--max-width); margin: 0 auto; }
+  }
+
+  @media (max-width:1100px){
+    .page-title{ font-size:36px }
+    .search-wrap{ flex:1 1 420px; }
+    .search{ max-width:520px; }
+    .accordion{ max-width: 94%; }
+  }
+  @media (max-width:760px){
+    .top-strip .nav-links{ display:none; }
+    .icons{ display:none; }
+    .page-title{ font-size:28px; }
+    .search-wrap{ justify-content:flex-start; }
+    .search{ max-width:100%; }
+    .action-row{ padding-left:12px; padding-right:12px; }
+    .page-title{ padding-left:12px; padding-right:12px; }
+    .accordion-header{ padding:12px 14px; }
+    .accordion-panel.open{ padding:10px 14px 14px 14px; }
+    .brand-img{ height:40px; } /* smaller on smallest screens */
+  }
+</style>
+</style>
+<body>
+  <!--TOP BAR NAVIGATION-->
+  <div class="top-bar">
+    <div class="container-fluid d-flex justify-content-end gap-4 px-4">
+      <a href="eComm.html">HOME</a>
+      <a href="#" data-bs-toggle="modal" data-bs-target="#aboutModal">ABOUT</a>
+      <a href="order.html">ORDERS</a>
+
+      <!-- HELP Dropdown -->
+      <div class="dropdown help">
+        <a>HELP</a>
+        <div class="dropdown-content">
+          <a href="#footer-help">Contact Us</a>
+          <a href="FAQ.html">FAQ</a>
+          <a href="#">Policies</a>
+          <a href="GENERAL.html">General</a>
+        </div>
+      </div>
+
+
+      <!-- EXPLORE Dropdown -->
+      <div class="dropdown explore">
+        <a>EXPLORE</a>
+        <div class="dropdown-content">
+          <a href="explore.html">Books on Sale</a>
+          <a href="explore.html">Books of the Year</a>
+          <a href="explore.html">Top Wishlisted Books</a>
+          <a href="explore.html">Rate & Review</a>
+        </div>
+      </div>
+  </div>
+</div>
+
+  <!--MAIN NAVIGATION BAR-->
+  <nav class="navbar main-navbar shadow">
+    <div class="container-fluid d-flex align-items-center px-4">
+
+      <a href="#top" class="navbar-brand">
+        <img src="assets/LOGO.png" alt="Logo" class="logo-img">
+      </a>
+
+      <form class="search-wrapper mx-auto color-#000">
+        <input type="search" class="search-input" placeholder="Search Books, Authors, and Genres">
+        <i class="bi bi-search search-icon"></i>
+      </form>
+
+      <div class="navbar-actions">
+        <a href="Wishlist.html" style="color: black; text-decoration: none; position: relative;"></i>
+          <i class="bi bi-heart icon-btn"></i>
+        </a>
+
+        <a href="Cart.html" style="color: black; text-decoration: none; position: relative;">
+          <i class="bi bi-cart icon-btn"></i>
+          <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            style="font-size: 0.5rem; display: none;">0</span>
+        </a>
+
+        <a href="EcommREGISTER.html" id="loginBtn" class="auth-btn">SIGN UP / LOGIN</a>
+
+        <div id="profileIcon" style="display: none;">
+          <a href="Profile.html" style="color: black; text-decoration: none;">
+            <i class="bi bi-person-circle profile-trigger"></i>
+          </a>
+      </div>
+    </div> 
+  </div> 
+</nav>
+
+<h1 class="page-title">Policies and Guidelines</h1>
+
+<main class="container" role="main">
+  <section class="accordion" aria-label="Policies and Guidelines">
+
+    <article class="accordion-item">
+      <button class="accordion-header" aria-expanded="false" aria-controls="panel-1" id="header-1">
+        <span class="chev-wrap" aria-hidden="true"><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        Careful Handling Promise
+      </button>
+      <div id="panel-1" class="accordion-panel" role="region" aria-labelledby="header-1" hidden>
+        <p>Nook PH recognizes the value of books not merely as retail products but as significant intellectual, educational, and personal assets of every reader. Each book is subjected to a careful and systematic inspection process prior to packaging to ensure that it meets our quality assurance standards and is free from visible defects, damage, or printing irregularities. Throughout the fulfillment process, from storage to final dispatch, all items are handled with deliberate care and professionalism by trained personnel. We utilize secure, durable, and protective packaging materials specifically selected to minimize exposure to pressure, moisture, and environmental risks during transit. This comprehensive handling procedure reflects our commitment to delivering books in their intended condition and preserving the quality expected by our customers.</p>
+      </div>
+    </article>
+
+    <article class="accordion-item">
+      <button class="accordion-header" aria-expanded="false" aria-controls="panel-2" id="header-2">
+        <span class="chev-wrap" aria-hidden="true"><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        Delivery Timeline Transparency
+      </button>
+      <div id="panel-2" class="accordion-panel" role="region" aria-labelledby="header-2" hidden>
+        <p>Transparency and accountability are core principles guiding Nook PH’s delivery operations. Estimated delivery timelines are clearly communicated to customers during the checkout process, providing a realistic and informed expectation of order arrival. These timelines are based on courier capacity, delivery location, and standard processing periods. While Nook PH endeavors to meet or exceed all stated delivery estimates, delays may occasionally occur due to factors beyond our control, including weather conditions, logistical disruptions, or regional delivery limitations. In such instances, customers are promptly notified through official communication channels, ensuring clarity, reassurance, and continuous updates until the order is successfully delivered.</p>
+      </div>
+    </article>
+
+    <article class="accordion-item">
+      <button class="accordion-header" aria-expanded="false" aria-controls="panel-3" id="header-3">
+        <span class="chev-wrap" aria-hidden="true"><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        Return with Respect Policy
+      </button>
+      <div id="panel-3" class="accordion-panel" role="region" aria-labelledby="header-3" hidden>
+        <p>Nook PH maintains a return policy that prioritizes fairness, transparency, and mutual respect between the company and its customers. Customers may initiate a return request for items that arrive damaged, defective, or inconsistent with the original order, provided that the request is submitted within the established return period. Each return request undergoes a thorough review to verify eligibility and to ensure compliance with company guidelines. Our team is committed to resolving concerns in a professional and considerate manner while balancing customer satisfaction with responsible business practices. This policy is designed to foster trust, accountability, and long-term customer relationships.</p>
+      </div>
+    </article>
+
+    <article class="accordion-item">
+      <button class="accordion-header" aria-expanded="false" aria-controls="panel-4" id="header-4">
+        <span class="chev-wrap" aria-hidden="true"><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        Payment Flexibility
+      </button>
+      <div id="panel-4" class="accordion-panel" role="region" aria-labelledby="header-4" hidden>
+        <p>To support accessibility and convenience, Nook PH offers a wide range of secure and flexible payment options tailored to diverse customer preferences. These options include digital wallets, online banking services, and other authorized electronic payment platforms recognized for their reliability and security. All transactions are processed through encrypted systems that prioritize data protection, privacy, and transaction integrity. Nook PH continuously evaluates its payment infrastructure to ensure compliance with security standards and to provide a seamless, efficient, and trustworthy checkout experience for every customer.</p>
+      </div>
+    </article>
+
+    <article class="accordion-item">
+      <button class="accordion-header" aria-expanded="false" aria-controls="panel-5" id="header-5">
+        <span class="chev-wrap" aria-hidden="true"><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        Gift & Surprise Option
+      </button>
+      <div id="panel-5" class="accordion-panel" role="region" aria-labelledby="header-5" hidden>
+        <p>Nook PH provides a dedicated gift and surprise option designed to elevate the experience of sharing books with others. Customers may request thoughtfully prepared gift-ready packaging that presents the book in an elegant and refined manner. A personalized message may also be included to convey sentiments, greetings, or special notes, adding emotional value to the gift. This service is suitable for a wide range of occasions, including birthdays, anniversaries, holidays, academic milestones, and personal celebrations. Through this option, Nook PH enables customers to transform books into meaningful and memorable gifts.</p>
+      </div>
+    </article>
+
+    <article class="accordion-item">
+      <button class="accordion-header" aria-expanded="false" aria-controls="panel-6" id="header-6">
+        <span class="chev-wrap" aria-hidden="true"><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        Sustainability Commitment
+      </button>
+      <div id="panel-6" class="accordion-panel" role="region" aria-labelledby="header-6" hidden>
+        <p>Nook PH is committed to adopting sustainable and environmentally responsible practices across its operations. We actively strive to reduce environmental impact by selecting eco-friendly, recyclable, and reusable packaging materials whenever feasible. Operational processes are regularly reviewed to minimize unnecessary waste and improve resource efficiency. This commitment reflects Nook PH’s responsibility to contribute positively to environmental preservation while supporting a culture of sustainability within the reading and publishing community. Our long-term objective is to align business growth with environmental stewardship and social responsibility.</p>
+      </div>
+    </article>
+
+    <article class="accordion-item">
+      <button class="accordion-header" aria-expanded="false" aria-controls="panel-7" id="header-7">
+        <span class="chev-wrap" aria-hidden="true"><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        Reader's First-Chapter Guarantee
+      </button>
+      <div id="panel-7" class="accordion-panel" role="region" aria-labelledby="header-7" hidden>
+        <p>Nook PH believes that informed readers make confident and satisfying purchasing decisions. To support this belief, selected titles may provide access to a preview or first chapter, allowing customers to evaluate the book’s content, writing style, and overall relevance prior to purchase. This feature enables readers to assess whether a title aligns with their interests and expectations, reducing uncertainty commonly associated with online book buying. The Reader’s First-Chapter Guarantee reflects Nook PH’s commitment to transparency, reader empowerment, and enhanced customer satisfaction.</p>
+      </div>
+    </article>
+
+    <article class="accordion-item">
+      <button class="accordion-header" aria-expanded="false" aria-controls="panel-8" id="header-8">
+        <span class="chev-wrap" aria-hidden="true"><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        Refund Options
+      </button>
+      <div id="panel-8" class="accordion-panel" role="region" aria-labelledby="header-8" hidden>
+        <p>Refunds at Nook PH are administered in strict accordance with the company’s established return, eligibility, and verification policies. Once a refund request has been reviewed and approved, the corresponding amount is processed through the original payment method or an alternative option agreed upon by both parties. Processing times may vary depending on the payment platform used, but every effort is made to ensure prompt, accurate, and transparent completion. This structured refund process ensures fairness, accountability, and clarity while reinforcing customer confidence in Nook PH’s service standards.</p>
+      </div>
+    </article>
+
+    <article class="accordion-item">
+      <button class="accordion-header" aria-expanded="false" aria-controls="panel-9" id="header-9">
+        <span class="chev-wrap" aria-hidden="true"><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        Customer Care Promise
+      </button>
+      <div id="panel-9" class="accordion-panel" role="region" aria-labelledby="header-9" hidden>
+        <p>Nook PH is dedicated to delivering consistent, professional, and responsive customer support. Our customer care team is trained to handle inquiries, concerns, and feedback with courtesy, efficiency, and attention to detail. Support services are accessible through official communication channels, ensuring that customers receive accurate and timely assistance. Through this commitment, Nook PH aims to maintain high service standards, resolve issues effectively, and cultivate positive and lasting relationships with its customers.</p>
+      </div>
+    </article>
+
+  </section>
+</main>
+
+  <footer class="footer-custom">
+    <div class="container">
+      <div class="row">
+        <!--FOOTER(About site daw)-->
+        <div class="col-md-4 mb-4">
+          <h5>NOOK.PH</h5>
+          <p class="small text-light">
+            0912-345-6789
+          </p>
+          <div class="d-flex mt-3">
+            <a href="#" class="footer-social-icon"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="footer-social-icon"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="footer-social-icon"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="footer-social-icon"><i class="bi bi-tiktok"></i></a>
+          </div>
+        </div>
+
+        <div class="col-md-2 mb-4">
+          <h5>SHOP</h5>
+          <a href="#">New Arrivals</a>
+          <a href="#">Best Sellers</a>
+          <a href="#">Sale</a>
+          <a href="#">Collections</a>
+        </div>
+
+        <div class="col-md-2 mb-4" id="footer-help">
+          <h5>HELP</h5>
+          <a href="#">Order Status</a>
+          <a href="#">Shipping & Delivery</a>
+          <a href="#">Returns</a>
+          <a href="#">FAQ</a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <h5>NEWSLETTER</h5>
+          <p class="small text-light">Subscribe to get special offers and updates.</p>
+          <div class="input-group mb-3">
+            <input type="email" class="form-control" placeholder="Enter your email" aria-label="Recipient's email">
+            <button class="btn btn-outline-light" type="button">SUBSCRIBE</button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="footer-divider">
+
+      <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="small mb-0">&copy; 2025 Nook PH. All Rights Reserved.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <a href="#" class="d-inline me-3 small text-light">Privacy Policy</a>
+          <a href="#" class="d-inline small text-light">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+
+  <!-- ABOUT MODAL -->
+<div class="modal fade" id="aboutModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content border-0" style="background:#4d0000; color:white;">
+
+      <!-- CLICK ANYWHERE TEXT -->
+      <div class="p-2 px-3 fw-bold text-decoration-underline" style="font-size:12px;">
+        TAP ANYWHERE TO EXIT
+      </div>
+
+      <!-- MAIN BODY (scrollable) -->
+      <div class="modal-body" style="max-height:70vh; overflow-y:auto;">
+
+        <!-- TITLE -->
+        <div class="text-center mb-2">
+          <h1 class="fw-bold text-uppercase m-0">About Us</h1>
+          <p class="m-0">NOOK PH. Your cozy corner for great reads.</p>
+        </div>
+
+        <!-- IMAGE + TEXT -->
+        <div class="row align-items-center mt-4">
+
+          <div class="col-md-6">
+            <img src="assets/ABOUT SECTION IMAGE.jpg" class="img-fluid rounded">
+          </div>
+
+          <div class="col-md-6">
+            <h4 class="fw-bold">Why We Exist</h4>
+            <p>
+              We exist because reading should never feel out of reach. Many readers struggle with limited availability, high prices, or lack of options, and our goal is to remove those barriers one book at a time. 
+              We want to make it possible for people across the Philippines to find books they love, order them easily, receive them quickly, and choose formats and conditions that fit their needs and budget. 
+              Whether someone is a lifelong reader, a student searching for resources, a parent building a child’s library, or a new reader just beginning their journey, they are welcome here.
+
+            </p>
+          </div>
+            <!-- MISSION + VISION SECTION -->
+            <div class="text-center mt-5 mb-3">
+              <h2 class="fw-bold text-white">Our Mission & Vision</h2>
+            </div>
+
+            <div class="row g-4">
+
+              <!-- MISSION -->
+              <div class="col-md-6">
+                <h4 class="fw-bold text-white text-center">Our Mission</h4>
+                <div class="p-4 rounded" style="background:white; color:#6b2b2b;">
+                  NOOK PH’s mission is simple but powerful: to bring joy by making books fast, easy, and accessible with real choices in quality and format for the readers across the Philippines. 
+                  We believe books are not just items to buy. They are companions. They are teachers. They are safe spaces. They are sparks of imagination, curiosity, and inspiration. And everyone deserves the chance to experience them. 
+                  So we created a bookshop built around accessibility, flexibility, and genuine care for the reading community, where books are for everyone, not just a select few. 
+
+                </div>
+              </div>
+
+              <!-- VISION -->
+              <div class="col-md-6">
+                <h4 class="fw-bold text-white text-center">Our Vision</h4>
+                <div class="p-4 rounded" style="background:white; color:#6b2b2b;">
+                  Our vision is a Philippines where books truly reach everyone. We dream of communities where students have the resources they need, 
+                  families share stories, children grow up surrounded by books, adults rediscover the joy of reading, and books become bridges that connect people rather than barriers that divide access.
+
+                </div>
+              </div>
+
+            </div>
+
+            <!-- PARAGRAPHS BELOW -->
+            <div class="text-center mt-4 px-3">
+              <p>When readers choose to shop with us, they support a mission built on respect for readers, passion for books, commitment to service, and growth for the reading community. 
+                We value transparency, fair choices, quality standards, accessibility, and reader happiness. For us, it has never been just about selling books — it is about sharing joy, one story at a time.</p>
+              <p>Whether someone is looking for their next favorite novel, a school requirement, a meaningful gift, or a book that has the power to change their life, we are grateful to be part of that journey. 
+                Together with our readers, we hope to make reading open, joyful, and accessible for everyone in the Philippines.</p>
+              <p class="fw-bold mt-2">Welcome to NOOK PH — where every story begins.</p>
+            </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const loginBtn = document.getElementById('loginBtn');
+      const profileIcon = document.getElementById('profileIcon');
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+      function updateUI(status) {
+        if (status) {
+          if (loginBtn) loginBtn.style.setProperty('display', 'none', 'important');
+          if (profileIcon) profileIcon.style.display = 'block';
+        } else {
+          if (loginBtn) loginBtn.style.setProperty('display', 'flex', 'important');
+          if (profileIcon) profileIcon.style.display = 'none';
+        }
+      }
+      updateUI(isLoggedIn);
+
+      function updateCartBadge() {
+        const cart = JSON.parse(localStorage.getItem('nookCart')) || [];
+        const badge = document.getElementById('cartBadge');
+
+        const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+        if (count > 0) {
+          badge.style.display = 'block';
+          badge.innerText = count;
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+      updateCartBadge();
+
+
+      window.addToCart = function (title, price, image, author) {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        if (!isLoggedIn) {
+          alert("Please login to add items to cart.");
+          return;
+        }
+
+        let cart = JSON.parse(localStorage.getItem('nookCart')) || [];
+
+        const existingItem = cart.find(item => item.title === title);
+
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({
+            id: 'item-' + new Date().getTime(),
+            title: title,
+            price: price,
+            image: image,
+            author: author,
+            quantity: 1
+          });
+        }
+
+        localStorage.setItem('nookCart', JSON.stringify(cart));
+
+
+        updateCartBadge();
+        alert(title + " added to cart!");
+      };
+
+      window.buyNow = function (title, price, image, author) {
+        addToCart(title, price, image, author);
+        window.location.href = "";
+      };
+    });
+
+    window.addToWishlist = function (title, price, image, author) {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      if (!isLoggedIn) {
+        alert("Please login to use Wishlist.");
+        return;
+      }
+
+      let wishlist = JSON.parse(localStorage.getItem('nookWishlist')) || [];
+
+      const exists = wishlist.find(item => item.title === title);
+      if (exists) {
+        alert("Item is already in your wishlist!");
+        return;
+      }
+
+      wishlist.push({ title, price, image, author });
+      localStorage.setItem('nookWishlist', JSON.stringify(wishlist));
+      alert("Added to Wishlist!");
+    };
+
+        // Accordion show/hide (simple accessible implementation)
+        (function () {
+      const headers = Array.from(document.querySelectorAll('.accordion-header'));
+      headers.forEach(btn => {
+        const panelId = btn.getAttribute('aria-controls');
+        const panel = document.getElementById(panelId);
+        if (!panel) return;
+        btn.setAttribute('aria-expanded', 'false');
+        panel.hidden = true;
+
+        btn.addEventListener('click', () => {
+          const isOpen = btn.getAttribute('aria-expanded') === 'true';
+          if (isOpen) closePanel(btn); else openPanel(btn);
+        });
+
+        btn.addEventListener('keydown', (e) => {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            btn.click();
+          }
+        });
+
+        function openPanel(button) {
+          const id = button.getAttribute('aria-controls');
+          const p = document.getElementById(id);
+          if (!p) return;
+          p.style.overflow = 'hidden';
+          p.hidden = false;
+          // animate
+          p.style.maxHeight = p.scrollHeight + 'px';
+          button.setAttribute('aria-expanded', 'true');
+          p.classList.add('open');
+
+          const onEnd = (ev) => {
+            if (ev.propertyName === 'max-height') {
+              p.style.maxHeight = 'none';
+              p.style.overflow = 'visible';
+              p.removeEventListener('transitionend', onEnd);
+            }
+          };
+          p.addEventListener('transitionend', onEnd);
+        }
+
+        function closePanel(button) {
+          const id = button.getAttribute('aria-controls');
+          const p = document.getElementById(id);
+          if (!p) return;
+          p.style.overflow = 'hidden';
+          if (p.style.maxHeight === '' || p.style.maxHeight === 'none') {
+            p.style.maxHeight = p.scrollHeight + 'px';
+          }
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              p.style.maxHeight = '0px';
+            });
+          });
+
+          const onEnd = (ev) => {
+            if (ev.propertyName === 'max-height') {
+              p.hidden = true;
+              p.classList.remove('open');
+              p.style.maxHeight = '';
+              p.style.overflow = '';
+              button.setAttribute('aria-expanded', 'false');
+              p.removeEventListener('transitionend', onEnd);
+            }
+          };
+          p.addEventListener('transitionend', onEnd);
+        }
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

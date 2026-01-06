@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nook PH — Combined (ribbon & footer fixed)</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --maroon: #4d0000;
+      --nook-red: #4d0000;
+      --muted-gray: #e9e9e9;
+      --text:#222;
+      font-family: "Source Sans 3", "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;color:var(--text);background:#f9f9f9}
+    a { text-decoration: none; color: inherit; }
+
+    .top-bar { background:var(--nook-red); color:#fff; height:40px; display:flex; align-items:center; padding:0 18px; z-index:1000;  position: fixed; top: 0; left: 0; width: 100%; }
+    .top-bar .container-fluid { display:flex; justify-content:flex-end; gap:18px; align-items:center; padding:0; }
+    .top-bar a { color:#fff; font-weight:700; font-size:13px; }
+
+    .main-navbar {
+      height:72px;
+      background:#fafafa;
+      display:flex;
+      align-items:center;
+      padding:8px 18px;
+      border-bottom:1px solid #eee;
+      position:sticky;
+      top:40px;
+      z-index:999;
+    }
+
+    .brand { display:flex; align-items:center; gap:12px; flex-shrink:0; margin-left:8px; }
+    .logo-img { height:120px; width:auto; object-fit:contain; display:block; }
+    .logo-fallback { display:none; font-weight:900; color:var(--nook-red); font-size:18px; letter-spacing:1px; }
+
+    .search-wrapper { position:relative; width:50%; margin:0 18px; }
+    .search-input { width:100%; padding:12px 48px 12px 18px; border-radius:40px; border:0; background: rgba(219,65,65,0.06); }
+    .search-icon { position:absolute; right:16px; top:50%; transform:translateY(-50%); color:#000; cursor:pointer; }
+
+    .navbar-actions { margin-left:auto; display:flex; align-items:center; gap:14px; }
+    .icon-btn { background:none; border:0; font-size:20px; cursor:pointer; color:#000; }
+    .auth-btn { color:#000; font-weight:700; padding:6px 8px; background:transparent; border-radius:4px; }
+
+
+    .banner-row{max-width:1200px;margin:40px auto 0;padding:0 18px}
+    .banner-wrap{display:flex;gap:18px;align-items:flex-end}
+    .small-banner{background:var(--maroon);color:#fff;padding:18px 22px;border-bottom:40px solid transparent;clip-path:polygon(0 0,100% 0,100% 100%,50% 85%,0 100%);font-weight:800;font-size:13px; height:90px; min-width: 140px; display: flex; align-items: center; justify-content: center;}
+
+   
+    .container-app { max-width:1200px; margin:18px auto; padding: 0 18px; display:block; position:relative; }
+/*-Bookmark navigations-*/
+.nav-links a:hover::after {
+width: 100%;
+}
+.bookmark {
+width: 120px;
+height: 150px;
+background: #e74c3c;
+color: white;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: bold;
+clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 70%, 0 100%);
+margin-left: 20px;
+}
+
+.vertical-text {
+writing-mode: vertical-rl; /* vertical text, right-to-left */
+text-orientation: upright; /* make letters upright instead of rotated */
+font-size: 24px;
+font-weight: bold;
+}
+
+/*-BOOKMARKS-*/
+  /* Wrapper for both bookmarks */
+  .bookmarks-wrapper {
+    display: flex;
+    gap: 40px;
+  }
+
+  .bookmark-container {
+width: 150px;
+height: 550px;
+background: #4d0000;
+color: white;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: bold;
+font-size: xx-large;
+clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 90%, 0 100%);
+margin-left: 20px;
+margin-bottom: 580px;
+
+}
+
+.mainbookmark {
+display: flex;
+flex-direction: column;
+align-items: center;
+line-height: 1.2;
+font-weight: bold;
+font-size: x-large;
+margin-top: -50px;
+justify-content: center;
+
+}
+
+.bookmark-containermini {
+width: 150px;
+height: 100px;
+background: #4d0000;
+color: white;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: bold;
+font-size: large;
+clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 90%, 0 100%);
+
+}
+
+.bookmarkmini {
+text-align: center;
+font-weight: bold;
+line-height: 1.2;
+font-size: 20px;
+}
+
+
+    .view { display:none; padding:22px 0 60px; }
+    .view.active { display:block; }
+
+    .product-grid{display:grid;grid-template-columns:420px 1fr 320px;gap:28px;align-items:start}
+    .back-link{display:inline-block;margin-bottom:12px;color:#444;text-decoration:none;font-weight:700}
+    .book-image img{display:block;width:65%;height:auto;background:#ddd;border:1px solid #e0e0e0}
+    .center-col .title{font-size:34px;margin:0 0 6px;font-weight:800}
+    .byline{margin-bottom:14px;color:#333}
+    .variants{display:flex;gap:10px;margin-bottom:12px}
+    .variant{background:#eee;border:1px solid #ddd;padding:10px 12px;font-weight:700;border-radius:4px;cursor:pointer}
+    .variant.active{background:#f6dede;border-color:#e0bcbc}
+    .sep{border:none;border-top:2px solid #eee;margin:18px 0}
+    .synopsis{color:#444;line-height:1.5}
+
+ 
+    .price-card{background:#fff;padding:18px;border-radius:4px;box-shadow:0 6px 18px rgba(0,0,0,0.08);border:1px solid #e6e6e6}
+    .price-top small{display:block;color:#666;margin-bottom:8px;font-weight:700}
+    .qty{display:flex;align-items:center;gap:6px;margin:10px 0}
+    .qty button{width:34px;height:34px;border:1px solid #ddd;background:#fff;border-radius:4px;cursor:pointer;font-size:18px}
+    .qty input{width:56px;text-align:center;padding:8px;border:1px solid #ddd;border-radius:4px}
+    .price{font-weight:800;font-size:20px;color:var(--maroon);margin-top:6px}
+    .card-actions{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+    .btn-nook{padding:10px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;cursor:pointer;font-weight:700}
+    .btn-nook.primary{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+
+
+    .genre-container { background:#fff; padding:12px; border-radius:6px; border:1px solid #eee; }
+    .genre-bar { background:var(--maroon); color:#fff; padding:8px; font-weight:800; text-align:center; border-radius:3px; margin-bottom:12px; }
+    .book-card-placeholder { width:100%; height:340px; object-fit:cover; border-radius:6px; background:#eee; display:block; }
+    .purchases-tabs { background:var(--nook-red); display:flex; gap:0; padding:6px; border-radius:4px; color:#fff; }
+    .purchases-tabs button{ flex:1; text-align:center; background:transparent; border:0; color:#fff; padding:10px; font-weight:800; cursor:pointer; }
+    .purchases-tabs button.active { box-shadow: inset 0 -4px 0 0 #fff; }
+    .orders-container { background:#fff; padding:18px; border:6px solid var(--nook-red); border-radius:4px; margin-top:12px; }
+    .maroon-empty { background:var(--nook-red); color:#fff; height:220px; display:flex; justify-content:center; align-items:center; font-weight:800; border-radius:3px; margin-top:12px; text-align:center; padding:12px; }
+
+    :root { --nook-red: #4d0000; }
+    .footer-custom {
+      background-color: var(--nook-red);
+      color: white;
+      padding-top: 3rem;
+      padding-bottom: 1.5rem;
+      margin-top: auto;
+      flex: 1;
+    }
+
+    .footer-custom h5 {
+      font-weight: bold;
+      margin-bottom: 1.2rem;
+      color: var(--nook-pink);
+    }
+
+    .footer-custom a {
+      color: #e0e0e0;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .footer-custom a:hover {
+      color: var(--nook-pink);
+      text-decoration: underline;
+    }
+
+    .footer-social-icon {
+      font-size: 1.5rem;
+      margin-right: 1rem;
+      color: white;
+    }
+
+    .footer-divider {
+      border-color: rgba(255, 255, 255, 0.2);
+      margin: 2rem 0;
+    }
+
+    @media (max-width:1100px){
+      .product-grid{grid-template-columns: 1fr; gap:18px}
+      .side-ribbon{display:none}
+      .container-app { margin-left: 0; padding-left: 18px; }
+      .search-wrapper { width: 40%; }
+    }
+    @media (max-width:800px){
+      .search-wrapper { width: 100%; }
+      .search-input { padding:10px 40px 10px 12px; }
+      .logo-img { height:40px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container-fluid">
+      <a href="#" data-view="home">HOME</a>
+      <a href="#" data-view="about">ABOUT</a>
+      <a href="#" data-view="orders">ORDERS</a>
+      <a href="#" data-view="help">HELP</a>
+      <a href="#" data-view="shop">EXPLORE</a>
+    </div>
+  </div>
+
+  <header class="main-navbar">
+    <div class="brand">
+      <img id="siteLogo" src="ASSETS/LOGO.png" alt="Nook PH logo" class="logo-img"
+           onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='inline-block';">
+      <span id="logoFallback" class="logo-fallback">NOOK.PH</span>
+    </div>
+
+    <form class="search-wrapper mx-auto" onsubmit="return false;">
+      <input id="globalSearch" class="search-input" type="search" placeholder="Search books, authors, and genres">
+      <i class="bi bi-search search-icon" onclick="doGlobalSearch()"></i>
+    </form>
+
+    <div class="navbar-actions">
+      <button class="icon-btn" title="Wishlist" onclick="location.href='Wishlist.html'"><i class="bi bi-heart"></i></button>
+      <button class="icon-btn" title="Cart" onclick="location.href='Cart.html'"><i class="bi bi-cart"></i></button>
+      <a id="loginBtn" class="auth-btn" href="EcommLOGIN.html">SIGN UP / LOGIN</a>
+      <a href="Profile.html" title="Profile" style="display:inline-block;"><i class="bi bi-person-circle" style="font-size:22px;color:#000"></i></a>
+    </div>
+  </header>
+
+  <main class="container-app">
+   
+    <aside class="side-ribbon" aria-hidden="true">
+      <div class="side-text">SCIENCE<br/>FICTION</div>
+    </aside>
+
+    
+<!---BOOKMARKS-->
+<div class="bookmarks-wrapper">
+  <div class="bookmark-container">
+      <div class="mainbookmark">
+        <span>S</span>
+        <span>C</span>
+        <span>I</span>
+        <span>E</span>
+        <span>N</span>
+        <span>C</span>
+        <span>E</span>
+        <span>F</span>
+        <span>I</span>
+        <span>C</span>
+        <span>T</span>
+        <span>I</span>
+        <span>O</span>
+        <span>N</span>
+      </div>
+  </div>
+
+  <div class="bookmark-containermini">
+      <div class="bookmarkmini">
+        <a href="fantasy_showcase.html" style="color: white; text-decoration: none;">
+          <span>FANTASY</span>
+        </a>
+      </div>
+  </div>
+
+  <div class="bookmark-containermini">
+      <div class="bookmarkmini">
+        <a href="folkliterature_showcase.html" style="color: white; text-decoration: none;">
+          <span>FOLK</span>
+          <span>LITERATURE</span>
+        </a>
+      </div>
+  </div>
+
+  <div class="bookmark-containermini">
+      <div class="bookmarkmini">
+        <a href="literary_showcase.html" style="color: white; text-decoration: none;">
+          <span>LITERARY</span>
+        </a>
+      </div>
+  </div>
+
+  <div class="bookmark-containermini">
+      <div class="bookmarkmini">
+        <a href="mystery-thriller_showcase.html" style="color: white; text-decoration: none;">
+          <span>MYSTERY/</span>
+          <span>THRILLER</span>
+        </a>
+      </div>
+  </div>
+
+  <div class="bookmark-containermini">
+      <div class="bookmarkmini">
+        <a href="romance_showcase.html" style="color: white; text-decoration: none;">
+          <span>ROMANCE</span>
+        </a>
+      </div>
+  </div>
+
+
+    <div class="content-with-ribbon">
+      <section id="view-home" class="view active">
+        <div class="product-grid">
+          <div class="left-col">
+            <a class="back-link" href="eComm.html">BACK</a>
+            <div class="book-image" role="img" aria-label="Book cover placeholder">
+              <img src="ASSETS/SCIENCE FICTION/Fahrenheit 451.jpg" alt="Book cover">
+            </div>
+          </div>
+
+          <div class="center-col">
+            <h1 class="title">Fahrenheit 451</h1>
+            <div class="byline">by <span class="author">Ray Bradbury</span></div>
+
+            <div class="variants" id="variants">
+              <button class="variant" data-price="1426">STANDARD<br/><span>PHP 899.00</span></button>
+              <button class="variant active" data-price="500">MASS BASIC<br/><span>PHP 269.00</span></button>
+            </div>
+
+            <hr class="sep">
+
+            <h3>Synopsis</h3>
+            <p class="synopsis">
+                In a future where books are banned and burned, fireman Guy Montag enforces censorship by destroying literature. Over time, he begins to question the shallow society he lives in and seeks knowledge through forbidden books. The story highlights themes of censorship, conformity, and the power of ideas.
+
+            </p>
+          </div>
+
+          <aside class="right-col">
+            <div class="price-card">
+              <div class="price-top">
+                <small>Your Price</small>
+                <div class="qty">
+                  <button id="dec">−</button>
+                  <input id="qty" type="number" value="1" min="1" />
+                  <button id="inc">+</button>
+                </div>
+                <div class="price">PHP <span id="total">500.00</span></div>
+              </div>
+
+              <div class="card-actions">
+                
+                <button class="btn-nook primary" id="buyNowProduct" onclick="location.href='order.html'">BUY NOW</button>
+                <button class="btn-nook" id="addToCartProduct" onclick="location.href='Cart.html'">ADD TO CART</button>
+                <button class="btn-nook" id="addToWishlistProduct" onclick="location.href='Wishlist.html'">ADD TO WISHLIST</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+     
+      <section id="view-shop" class="view">
+        <div class="row gx-4">
+          <div class="col-lg-3 mb-4">
+            <div class="genre-container">
+              <div class="genre-bar">GENRE</div>
+              <div class="genre-list">
+                <div class="arrow-tab"><strong>Fantasy</strong></div>
+                <div class="arrow-tab"><strong>Literary</strong></div>
+                <div class="arrow-tab"><strong>Romance</strong></div>
+                <div class="arrow-tab"><strong>Mystery/Thriller</strong></div>
+                <div class="arrow-tab"><strong>Science Fiction</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-9">
+            <div class="mb-4 d-flex align-items-center justify-content-between">
+              <h2 class="section-title">BOOKS ON SALE</h2>
+              <div style="width:40%;">
+                <input id="shopSearch" class="form-control" placeholder="Search books, authors..." oninput="filterShop()">
+              </div>
+            </div>
+
+            <div id="productsGrid" class="row g-4"></div>
+          </div>
+        </div>
+      </section>
+
+   
+      <section id="view-orders" class="view">
+        <div class="purchases-col">
+          <h2 class="section-title text-center">PURCHASES AND HISTORY</h2>
+
+          <div class="d-flex justify-content-end mb-2">
+            <div class="sort-by" style="color:var(--nook-red); font-weight:700; cursor:pointer;">Sort By <i class="bi bi-caret-down-fill ms-1"></i></div>
+          </div>
+
+          <div class="purchases-header mb-3">
+            <div class="purchases-tabs" role="tablist" aria-label="Order status tabs" id="pTabs">
+              <button class="active" data-tab="all">ALL</button>
+              <button data-tab="to-pay">TO PAY</button>
+              <button data-tab="to-ship">TO SHIP</button>
+              <button data-tab="to-receive">TO RECEIVE</button>
+              <button data-tab="completed">COMPLETED</button>
+              <button data-tab="cancelled">CANCELLED</button>
+              <button data-tab="return-refund">RETURN/REFUND</button>
+            </div>
+
+            <div class="search-area mt-3">
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input id="orderSearch" type="text" class="form-control" placeholder="Search by Author, Order ID or Book Name">
+              </div>
+            </div>
+          </div>
+
+          <div id="contentArea">
+            <div id="emptyBox" class="maroon-empty" style="display:none;">
+              <div id="emptyMsg" style="font-size:18px;"></div>
+            </div>
+
+            <div id="ordersContainer" class="orders-container" style="display:none;"></div>
+          </div>
+        </div>
+      </section>
+
+   
+      <section id="view-about" class="view">
+        <div style="background:var(--nook-red); color:#fff; padding:28px; border-radius:10px;">
+          <h2>About Nook PH</h2>
+          <p>Welcome — combined single-file site.</p>
+        </div>
+      </section>
+
+      <section id="view-help" class="view">
+        <div style="background:#fff;padding:18px;border-radius:6px;border:1px solid #eee;">
+          <h3>Help & FAQ</h3>
+          <p>Use the navigation to switch between Home, Shop, and Orders.</p>
+        </div>
+      </section>
+    </div> 
+  </main>
+
+  
+  <footer class="footer-custom">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <h5>NOOK.PH</h5>
+          <p class="small text-light">
+            hahahahhahahahahaha
+          </p>
+          <div class="d-flex mt-3">
+            <a href="#" class="footer-social-icon"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="footer-social-icon"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="footer-social-icon"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="footer-social-icon"><i class="bi bi-tiktok"></i></a>
+          </div>
+        </div>
+
+        <div class="col-md-2 mb-4">
+          <h5>SHOP</h5>
+          <a href="#">New Arrivals</a>
+          <a href="#">Best Sellers</a>
+          <a href="#">Sale</a>
+          <a href="#">Collections</a>
+        </div>
+
+        <div class="col-md-2 mb-4">
+          <h5>HELP</h5>
+          <a href="#">Order Status</a>
+          <a href="#">Shipping & Delivery</a>
+          <a href="#">Returns</a>
+          <a href="#">FAQ</a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <h5>NEWSLETTER</h5>
+          <p class="small text-light">Subscribe to get special offers and updates.</p>
+          <div class="input-group mb-3">
+            <input type="email" class="form-control" placeholder="Enter your email" aria-label="Recipient's email">
+            <button class="btn btn-outline-light" type="button">SUBSCRIBE</button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="footer-divider">
+
+      <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="small mb-0">&copy; 2025 Nook PH. All Rights Reserved.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <a href="#" class="d-inline me-3 small text-light">Privacy Policy</a>
+          <a href="#" class="d-inline small text-light">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    
+    function showView(view) {
+      const map = { home:'view-home', shop:'view-shop', orders:'view-orders', about:'view-about', help:'view-help' };
+      const id = map[view] || view;
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
+    }
+    document.querySelectorAll('[data-view]').forEach(el => {
+      el.addEventListener('click', (e) => { e.preventDefault(); showView(el.getAttribute('data-view')); });
+    });
+
+   
+    (function productLogic(){
+      let unitPrice = 500.00;
+      const qtyInput = document.getElementById('qty');
+      const totalEl = document.getElementById('total');
+      const inc = document.getElementById('inc');
+      const dec = document.getElementById('dec');
+
+      function format(n){ return Number(n).toFixed(2); }
+      function updateTotal(){
+        const q = Math.max(1, parseInt(qtyInput.value || 1));
+        totalEl.textContent = format(q * unitPrice);
+        qtyInput.value = q;
+      }
+
+      document.getElementById('variants').addEventListener('click', (e) => {
+        const btn = e.target.closest('.variant');
+        if(!btn) return;
+        document.querySelectorAll('.variant').forEach(v=>v.classList.remove('active'));
+        btn.classList.add('active');
+        unitPrice = Number(btn.dataset.price) || unitPrice;
+        updateTotal();
+      });
+
+      inc && inc.addEventListener('click', ()=> { qtyInput.value = Number(qtyInput.value || 1) + 1; updateTotal(); });
+      dec && dec.addEventListener('click', ()=> { qtyInput.value = Math.max(1, Number(qtyInput.value || 1) - 1); updateTotal(); });
+      qtyInput && qtyInput.addEventListener('input', updateTotal);
+
+      document.getElementById('buyNowProduct').addEventListener('click', ()=> {
+       
+        location.href = 'order.html';
+      });
+
+      document.getElementById('addToCartProduct').addEventListener('click', ()=> {
+        location.href = 'Cart.html';
+      });
+
+      document.getElementById('addToWishlistProduct').addEventListener('click', ()=> {
+        location.href = 'Wishlist.html';
+      });
+
+      updateTotal();
+    })();
+
+    const demoProducts = [
+      { id:'p1', title:'No Longer Human', author:'Osamu Dazai', price:972, img:'https://via.placeholder.com/360x540?text=No+Longer+Human' },
+      { id:'p2', title:'The Great Gatsby', author:'F. Scott Fitzgerald', price:350, img:'https://via.placeholder.com/360x540?text=Gatsby' },
+      { id:'p3', title:'Pride and Prejudice', author:'Jane Austen', price:951, img:'https://via.placeholder.com/360x540?text=P+and+P' },
+      { id:'p4', title:'Maraya', author:'Carmelita Rawr', price:455, img:'https://via.placeholder.com/360x540?text=Maraya' }
+    ];
+
+    function renderShop(products = demoProducts){
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = products.map(p => `
+        <div class="col-md-4">
+          <img src="${p.img}" alt="${p.title}" class="book-card-placeholder">
+          <h5 class="fw-bold mb-0">${p.title}</h5>
+          <small class="text-muted">${p.author}</small>
+          <div class="text-muted" style="font-size: 0.8rem;">STANDARD PRICE</div>
+          <div class="price-text">₱${p.price.toLocaleString()} <span style="font-size:0.7rem; font-weight:normal;">PHP</span></div>
+          <div class="d-flex gap-2 mt-2">
+            <button class="btn-nook-primary flex-fill" onclick="location.href='Cart.html'">ADD TO CART</button>
+            <button class="btn-nook-primary flex-fill" onclick="location.href='order.html'">BUY NOW</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterShop(){
+      const q = (document.getElementById('shopSearch').value || '').trim().toLowerCase();
+      if(!q){ renderShop(); return; }
+      const filtered = demoProducts.filter(p => (p.title + ' ' + p.author).toLowerCase().includes(q));
+      renderShop(filtered);
+    }
+
+  
+    const sampleOrders = [
+      { id: 'ORD-20250101-001', status: 'completed', items:[{ title:'Maraya', author:'Carmelita Rawr', qty:1, thumbnail:'https://via.placeholder.com/90x120?text=Maraya', price:455 }], shippingFee:5 },
+      { id: 'ORD-20250101-002', status: 'completed', items:[{ title:'TITLE', author:'AUTHOR NAME', qty:1, thumbnail:'https://via.placeholder.com/90x120?text=Title', price:455 }], shippingFee:5 }
+    ];
+
+    function formatCurrency(num){ return num.toLocaleString('en-PH', { style:'currency', currency:'PHP' }); }
+
+    function renderOrders(orders){
+      const container = document.getElementById('ordersContainer');
+      container.style.display = 'block';
+      container.innerHTML = orders.map(order => {
+        const itemsHtml = order.items.map(it => `
+          <div class="item-row">
+            <img src="${it.thumbnail}" alt="${it.title}">
+            <div class="item-details" style="flex:1;">
+              <div class="title">${it.title}</div>
+              <div class="author">${it.author}</div>
+              <div class="price-note">MASS BASIC PRICE</div>
+              <div style="margin-top:8px;">Qty: ${it.qty}x</div>
+            </div>
+            <div style="min-width:160px; text-align:right;">
+              <div style="font-size:13px;">Product Price: <strong>${formatCurrency(it.price)}</strong></div>
+              <div style="font-size:13px; margin-top:6px;">Shipping Fee: <strong>${formatCurrency(order.shippingFee)}</strong></div>
+            </div>
+          </div>
+        `).join('');
+        const subtotal = order.items.reduce((s,i) => s + (i.price * i.qty), 0);
+        const total = subtotal + order.shippingFee;
+        return `
+          <div class="order-card">
+            <div class="order-meta d-flex justify-content-between">
+              <div class="left">
+                <div>Order ID: ${order.id}</div>
+                <div style="font-weight:700; margin-top:6px;">PARCEL HAS BEEN DELIVERED / COMPLETED</div>
+              </div>
+              <div class="right text-end">
+                <div style="color:#333;">Order Total:</div>
+                <div style="color:#b40000; font-weight:800; font-size:1.25rem;">${formatCurrency(total)}</div>
+              </div>
+            </div>
+
+            ${itemsHtml}
+
+            <div class="order-actions d-flex justify-content-end gap-2 mt-2">
+              <button class="btn btn-outline-secondary btn-sm" onclick="location.href='order.html'">Rate</button>
+              <button class="btn btn-danger btn-sm" onclick="location.href='order.html'">Request for Return/Refund</button>
+              <button class="btn btn-outline-danger btn-sm" onclick="location.href='eComm.html'">Buy Again</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('pTabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if(!btn) return;
+      document.querySelectorAll('#pTabs button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.dataset.tab;
+      if(tab === 'completed') renderOrders(sampleOrders.filter(o => o.status === 'completed'));
+      else document.getElementById('ordersContainer').innerHTML = '<div style="padding:18px;">No orders in this tab.</div>';
+    });
+
+    document.getElementById('orderSearch').addEventListener('input', (e) => {
+      const q = (e.target.value||'').trim().toLowerCase();
+      if(!q){ renderOrders(sampleOrders.filter(o => o.status === 'completed')); return; }
+      const filtered = sampleOrders.filter(o => o.id.toLowerCase().includes(q) || o.items.some(it => (it.title + ' ' + it.author).toLowerCase().includes(q)));
+      renderOrders(filtered);
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderShop();
+      renderOrders(sampleOrders.filter(o => o.status === 'completed'));
+    
+      const logo = document.getElementById('siteLogo');
+      if (logo && logo.style.display === 'none') {
+       
+      }
+    });
+
+    function doGlobalSearch(){
+      const q = (document.getElementById('globalSearch').value||'').trim();
+      showView('shop');
+      document.getElementById('shopSearch').value = q;
+      filterShop();
+    }
+  </script>
+</body>
+</html>
